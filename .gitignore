@@ -1,0 +1,7 @@
+# Package managers
+/vendor
+/composer.lock
+
+# IDEs
+/.idea
+/.vscode
