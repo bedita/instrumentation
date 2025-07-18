@@ -22,20 +22,20 @@
     "require": {
         "php": "^8.1",
         "ext-opentelemetry": "*",
-        "bedita/api": "^5.30.0",
-        "bedita/core": "^5.30.0",
+        "bedita/api": "^5.40.0",
+        "bedita/core": "^5.40.0",
         "cakephp/cakephp": "^4.5.0",
-        "open-telemetry/api": "^1.1",
-        "open-telemetry/opentelemetry-auto-cakephp": "^0.0.3",
-        "open-telemetry/opentelemetry-auto-pdo": "^0.0.15",
-        "open-telemetry/opentelemetry-auto-psr3": "^0.0.7",
-        "open-telemetry/opentelemetry-auto-psr16": "^0.0.3",
-        "open-telemetry/sem-conv": "^1.27"
+        "open-telemetry/api": "^1.4",
+        "open-telemetry/opentelemetry-auto-cakephp": "^0.0.6",
+        "open-telemetry/opentelemetry-auto-pdo": "^0.1.1",
+        "open-telemetry/opentelemetry-auto-psr3": "^0.1.1",
+        "open-telemetry/opentelemetry-auto-psr16": "^0.0.5",
+        "open-telemetry/sem-conv": "^1.32"
     },
     "require-dev": {
         "cakephp/cakephp-codesniffer": "^5.1",
         "phpstan/phpstan": "^1.12",
-        "open-telemetry/sdk": "^1.1",
+        "open-telemetry/sdk": "^1.6",
         "symfony/http-client": "^7.1"
     },
     "suggest": {
