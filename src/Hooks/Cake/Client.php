@@ -26,6 +26,7 @@ use OpenTelemetry\API\Trace\SpanKind;
 use OpenTelemetry\API\Trace\StatusCode;
 use OpenTelemetry\Context\Context;
 use OpenTelemetry\SemConv\TraceAttributes;
+use OpenTelemetry\SemConv\Version;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
@@ -51,6 +52,11 @@ class Client
      */
     public static function register(CachedInstrumentation $instrumentation): void
     {
+        $instrumentation = new CachedInstrumentation(
+            'com.bedita.instrumentation.client',
+            schemaUrl: Version::VERSION_1_32_0->url(),
+        );
+
         hook(
             CakeClient::class,
             'send',
@@ -77,10 +83,9 @@ class Client
                     ->setAttribute(TraceAttributes::HTTP_REQUEST_BODY_SIZE, $request->getHeaderLine('Content-Length'))
                     ->setAttribute(TraceAttributes::SERVER_ADDRESS, $request->getUri()->getHost())
                     ->setAttribute(TraceAttributes::SERVER_PORT, $request->getUri()->getPort())
-                    ->setAttribute(TraceAttributes::CODE_FUNCTION, $function)
-                    ->setAttribute(TraceAttributes::CODE_NAMESPACE, $class)
-                    ->setAttribute(TraceAttributes::CODE_FILEPATH, $filename)
-                    ->setAttribute(TraceAttributes::CODE_LINENO, $lineno);
+                    ->setAttribute(TraceAttributes::CODE_FUNCTION_NAME, sprintf('%s::%s', $class, $function))
+                    ->setAttribute(TraceAttributes::CODE_FILE_PATH, $filename)
+                    ->setAttribute(TraceAttributes::CODE_LINE_NUMBER, $lineno);
 
                 foreach ($propagator->fields() as $field) {
                     $request = $request->withoutHeader($field);
@@ -90,7 +95,7 @@ class Client
                     if ($request->hasHeader($header)) {
                         $spanBuilder->setAttribute(
                             sprintf('http.request.header.%s', strtolower($header)),
-                            $request->getHeader($header)
+                            $request->getHeader($header),
                         );
                     }
                 }
@@ -130,7 +135,7 @@ class Client
                     }
                 }
                 if ($exception) {
-                    $span->recordException($exception, [TraceAttributes::EXCEPTION_ESCAPED => true]);
+                    $span->recordException($exception);
                     $span->setStatus(StatusCode::STATUS_ERROR, $exception->getMessage());
                 }
 
