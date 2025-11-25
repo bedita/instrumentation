@@ -57,8 +57,8 @@
             "@stan",
             "@cs-check"
         ],
-        "cs-check": "vendor/bin/phpcs",
-        "cs-fix": "vendor/bin/phpcbf",
+        "cs-check": "vendor/bin/phpcs --colors -p --standard=vendor/cakephp/cakephp-codesniffer/CakePHP ./src",
+        "cs-fix": "vendor/bin/phpcbf --colors --standard=vendor/cakephp/cakephp-codesniffer/CakePHP ./src",
         "stan": "vendor/bin/phpstan analyse"
     },
     "prefer-stable": true,

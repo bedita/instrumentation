@@ -60,7 +60,14 @@ class Client
         hook(
             CakeClient::class,
             'send',
-            pre: static function (CakeClient $client, array $params, string $class, string $function, ?string $filename, ?int $lineno) use ($instrumentation): ?array {
+            pre: static function (
+                CakeClient $client,
+                array $params,
+                string $class,
+                string $function,
+                ?string $filename,
+                ?int $lineno,
+            ) use ($instrumentation): ?array {
                 $request = $params[0] ?? null;
                 if (!$request instanceof RequestInterface) {
                     Context::storage()->attach(Context::getCurrent());
@@ -108,7 +115,12 @@ class Client
 
                 return [$request];
             },
-            post: static function (CakeClient $client, array $params, ?ResponseInterface $response, ?Throwable $exception): void {
+            post: static function (
+                CakeClient $client,
+                array $params,
+                ?ResponseInterface $response,
+                ?Throwable $exception,
+            ): void {
                 $scope = Context::storage()->scope();
                 $scope?->detach();
 
@@ -122,12 +134,18 @@ class Client
                 if ($response) {
                     $span->setAttribute(TraceAttributes::HTTP_RESPONSE_STATUS_CODE, $response->getStatusCode());
                     $span->setAttribute(TraceAttributes::NETWORK_PROTOCOL_VERSION, $response->getProtocolVersion());
-                    $span->setAttribute(TraceAttributes::HTTP_RESPONSE_BODY_SIZE, $response->getHeaderLine('Content-Length'));
+                    $span->setAttribute(
+                        TraceAttributes::HTTP_RESPONSE_BODY_SIZE,
+                        $response->getHeaderLine('Content-Length'),
+                    );
 
                     foreach ((array)(get_cfg_var('otel.instrumentation.http.response_headers') ?: []) as $header) {
                         if ($response->hasHeader($header)) {
                             /** @psalm-suppress ArgumentTypeCoercion */
-                            $span->setAttribute(sprintf('http.response.header.%s', strtolower($header)), $response->getHeader($header));
+                            $span->setAttribute(
+                                sprintf('http.response.header.%s', strtolower($header)),
+                                $response->getHeader($header),
+                            );
                         }
                     }
                     if ($response->getStatusCode() >= 400 && $response->getStatusCode() < 600) {
