@@ -57,11 +57,6 @@
             "@stan",
             "@cs-check"
         ],
-        "cs-setup": [
-            "vendor/bin/phpcs --config-set installed_paths vendor/cakephp/cakephp-codesniffer",
-            "vendor/bin/phpcs --config-set default_standard CakePHP",
-            "vendor/bin/phpcs --config-set colors 1"
-        ],
         "cs-check": "vendor/bin/phpcs --colors -p --standard=vendor/cakephp/cakephp-codesniffer/CakePHP ./src",
         "cs-fix": "vendor/bin/phpcbf --colors --standard=vendor/cakephp/cakephp-codesniffer/CakePHP ./src",
         "stan": "vendor/bin/phpstan analyse"
