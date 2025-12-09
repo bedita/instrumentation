@@ -18,6 +18,6 @@ jobs:
   release-job:
     uses: bedita/github-workflows/.github/workflows/release.yml@v2
     with:
-      main_branch: 'main'
-      dist_branches: '["main"]'
+      main_branch: '1.x'
+      dist_branches: '["1.x"]'
       version_bump: ${{ inputs.releaseType }}

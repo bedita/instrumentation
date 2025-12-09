@@ -19,7 +19,7 @@ jobs:
     runs-on: 'ubuntu-latest'
     strategy:
       matrix:
-        php-version: ["8.2","8.3"]
+        php-version: ["8.3"]
     steps:
       - name: 'Checkout current revision'
         uses: 'actions/checkout@v6'
@@ -57,7 +57,7 @@ jobs:
     runs-on: 'ubuntu-latest'
     strategy:
       matrix:
-        php-version: ["8.2","8.3"]
+        php-version: ["8.3"]
     steps:
       - name: 'Checkout current revision'
         uses: 'actions/checkout@v6'
