@@ -37,9 +37,9 @@ and the [PHP-specific documentation](https://opentelemetry.io/docs/languages/php
 This library provides the following instrumentations, which can be enabled or disabled individually using their respective names:
 - `bedita` main instrumentation (currently does nothing by itself)
 - `bedita.client` CakePHP HTTP client (requires `bedita`)
-- `cakephp` CakePHP HTTP server, controllers and commands ([project](https://github.com/open-telemetry/opentelemetry-php-contrib/tree/main/src/Instrumentation/CakePHP))
+- `bedita.server` CakePHP HTTP server (requires `bedita`)
+- `bedita.psr3` exports logs from loggers compliant with PSR-3 standard (requires `bedita`)
 - `pdo` PHP PDO ([project](https://github.com/open-telemetry/opentelemetry-php-contrib/tree/main/src/Instrumentation/PDO))
-- `psr3` loggers compliant with PSR-3 standard ([project](https://github.com/open-telemetry/opentelemetry-php-contrib/tree/main/src/Instrumentation/Psr3))
 - `psr16` cache engines compliant with PSR-16 standard ([project](https://github.com/open-telemetry/opentelemetry-php-contrib/tree/main/src/Instrumentation/Psr16))
 
 ### Example configuration
@@ -68,8 +68,4 @@ export OTEL_PROPAGATORS="tracecontext,baggage"
 # Instrumentation
 export OTEL_PHP_EXCLUDED_URLS="/status"
 # export OTEL_PHP_DISABLED_INSTRUMENTATIONS="pdo"
-
-# Log
-# see: https://github.com/open-telemetry/opentelemetry-php-contrib/tree/main/src/Instrumentation/Psr3#mode
-export OTEL_PHP_PSR3_MODE="export"
 ```
