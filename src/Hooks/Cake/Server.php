@@ -131,6 +131,10 @@ class Server
                     $span->recordException($exception);
                     $span->setStatus(StatusCode::STATUS_ERROR, $exception->getMessage());
                 }
+                // Server::run always returns a response, so neither is set only when PHP aborts (fatal error).
+                if (!$response && !$exception) {
+                    $span->setStatus(StatusCode::STATUS_ERROR, 'Request aborted');
+                }
 
                 $span->end();
             },
