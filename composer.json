@@ -22,15 +22,12 @@
     "require": {
         "php": "^8.3",
         "ext-opentelemetry": "*",
-        "bedita/api": "^6.0.0",
-        "bedita/core": "^6.0.0",
-        "cakephp/cakephp": "^5.0.0",
+        "cakephp/cakephp": "^5.2.0",
         "open-telemetry/api": "^1.7",
-        "open-telemetry/opentelemetry-auto-cakephp": "^0.0.6",
         "open-telemetry/opentelemetry-auto-pdo": "^0.3.0",
-        "open-telemetry/opentelemetry-auto-psr3": "^0.1.1",
         "open-telemetry/opentelemetry-auto-psr16": "^0.0.5",
-        "open-telemetry/sem-conv": "^1.37"
+        "open-telemetry/sem-conv": "^1.37",
+        "psr/log": "^3.0"
     },
     "require-dev": {
         "cakephp/cakephp-codesniffer": "^5.1",
