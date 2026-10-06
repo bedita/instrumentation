@@ -20,8 +20,11 @@ use OpenTelemetry\SemConv\Version;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
+use function http_response_code;
+use function is_int;
 use function is_string;
 use function OpenTelemetry\Instrumentation\hook;
+use function register_shutdown_function;
 use function sprintf;
 use function str_replace;
 use function str_starts_with;
@@ -106,7 +109,6 @@ class Server
                 if (!$scope) {
                     return;
                 }
-                $scope->detach();
                 $span = Span::fromContext($scope->context());
 
                 $request = Router::getRequest();
@@ -116,6 +118,24 @@ class Server
                     $span->updateName(sprintf('%s %s', $request->getMethod(), $route));
                 }
 
+                // Server::run always returns a response, so neither is set only when PHP aborts (fatal error).
+                // This post hook then runs before the shutdown functions: keep the span current until Cake's fatal
+                // error handler, registered earlier, has logged and rendered the error.
+                if (!$response && !$exception) {
+                    register_shutdown_function(static function () use ($scope, $span): void {
+                        $scope->detach();
+                        $code = http_response_code();
+                        if (is_int($code)) {
+                            $span->setAttribute(TraceAttributes::HTTP_RESPONSE_STATUS_CODE, $code);
+                        }
+                        $span->setStatus(StatusCode::STATUS_ERROR, 'Request aborted');
+                        $span->end();
+                    });
+
+                    return;
+                }
+
+                $scope->detach();
                 if ($response) {
                     $span->setAttribute(TraceAttributes::HTTP_RESPONSE_STATUS_CODE, $response->getStatusCode());
                     $span->setAttribute(
@@ -130,10 +150,6 @@ class Server
                 if ($exception) {
                     $span->recordException($exception);
                     $span->setStatus(StatusCode::STATUS_ERROR, $exception->getMessage());
-                }
-                // Server::run always returns a response, so neither is set only when PHP aborts (fatal error).
-                if (!$response && !$exception) {
-                    $span->setStatus(StatusCode::STATUS_ERROR, 'Request aborted');
                 }
 
                 $span->end();
